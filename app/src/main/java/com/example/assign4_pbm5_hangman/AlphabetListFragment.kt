@@ -5,14 +5,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.assign4_pbm5_hangman.databinding.FragmentAlphabetListBinding
 
 //notifies which element to remove
-
 private const val TAG = "CrimeListFragment"
 
 class AlphabetListFragment : Fragment() {
@@ -40,8 +38,10 @@ class AlphabetListFragment : Fragment() {
         binding.alphabetRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
         val crimes = crimeListViewModel.a_list
-        val adapter = AlphabetListAdapter(crimes)
+        val adapter = AlphabetListAdapter(crimes, this)
         binding.alphabetRecyclerView.adapter = adapter
+
+
 
         return binding.root
     }
@@ -50,4 +50,9 @@ class AlphabetListFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
+    fun rem(s: String) {
+        crimeListViewModel.a_list.remove(s)
+    }
+
 }

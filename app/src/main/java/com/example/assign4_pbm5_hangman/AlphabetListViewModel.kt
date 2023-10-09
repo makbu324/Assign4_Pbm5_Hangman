@@ -11,7 +11,7 @@ class AlphabetListViewModel : ViewModel() {
 
     init {
         for (i in 0 until 100) {
-            val alphabet = "a"
+            val alphabet = "#"
 
             a_list += alphabet
         }
