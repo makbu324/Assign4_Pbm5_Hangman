@@ -11,7 +11,7 @@ import com.google.android.material.snackbar.Snackbar
 class CrimeHolder(
     private val binding: AlphabetListBinding
 ) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(alphabet: String, alphabetListFragment: AlphabetListFragment) {
+    fun bind(alphabet: String, alphabetListFragment: AlphabetListFragment, onData : OnDataPass) {
         binding.alphabetButton.text = alphabet
         binding.root.setOnClickListener{
             Snackbar.make(
@@ -22,17 +22,16 @@ class CrimeHolder(
             binding.alphabetButton.text = "#"
             binding.root.isFocusable = false
 
-            //yay
             alphabetListFragment.rem(alphabet)
-
-            //
+            onData.onDataPass(alphabet)
         }
     }
 }
 
 class AlphabetListAdapter(
     private var alphabets: MutableList<String>,
-    private val alphabetListFragment: AlphabetListFragment
+    private val alphabetListFragment: AlphabetListFragment,
+    private val onData : OnDataPass
 ) : RecyclerView.Adapter<CrimeHolder>() {
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -44,7 +43,7 @@ class AlphabetListAdapter(
     }
     override fun onBindViewHolder(holder: CrimeHolder, position: Int) {
         val alphabet = alphabets[(position) % 26]
-        holder.bind(alphabet, alphabetListFragment)
+        holder.bind(alphabet, alphabetListFragment, onData)
     }
 
     override fun getItemCount() = alphabets.size

@@ -1,5 +1,6 @@
 package com.example.assign4_pbm5_hangman
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -16,12 +17,24 @@ private const val TAG = "CrimeListFragment"
 class AlphabetListFragment : Fragment() {
 
     private var _binding: FragmentAlphabetListBinding? = null
+
     private val binding
         get() = checkNotNull(_binding) {
             "Cannot access binding because it is null. Is the view visible?"
         }
 
     private val crimeListViewModel: AlphabetListViewModel by viewModels()
+
+    lateinit var dataPasser: OnDataPass
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        dataPasser = context as OnDataPass
+    }
+
+    fun passData(data: String){
+        dataPasser.onDataPass(data)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,10 +51,8 @@ class AlphabetListFragment : Fragment() {
         binding.alphabetRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
         val crimes = crimeListViewModel.a_list
-        val adapter = AlphabetListAdapter(crimes, this)
+        val adapter = AlphabetListAdapter(crimes, this, dataPasser)
         binding.alphabetRecyclerView.adapter = adapter
-
-
 
         return binding.root
     }
@@ -54,5 +65,7 @@ class AlphabetListFragment : Fragment() {
     fun rem(s: String) {
         crimeListViewModel.a_list.remove(s)
     }
+
+
 
 }
