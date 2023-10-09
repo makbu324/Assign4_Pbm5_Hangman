@@ -1,10 +1,12 @@
 package com.example.assign4_pbm5_hangman
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.coordinatorlayout.widget.CoordinatorLayout
+import com.google.android.material.snackbar.Snackbar
 
 
 interface OnDataPass {
@@ -14,12 +16,19 @@ interface OnDataPass {
 class MainActivity : AppCompatActivity(), OnDataPass {
     private lateinit var imgView: ImageView
     private lateinit var wordView: TextView
+    var coordinatorLayout: CoordinatorLayout? = null
 
     var hang_state: Int = 0
-    var the_word: String = "SHINJI"
+    var the_word: String = "RONALD"
     var wordNow: String = "______"
+    var layout: CoordinatorLayout? = null
 
-    fun hangman_state_return(num: Int): Int {
+    fun hangman_state_return(num: Int, alphabet: String): Int {
+        if (num < 7)
+            Toast.makeText(this,
+                "Oops! \"" + alphabet + "\" is NOT in there...",
+                Toast.LENGTH_SHORT
+            ).show()
         if (num == 1) (return R.drawable.hangman_state_1)
         else if (num == 2) (return R.drawable.hangman_state_2)
         else if (num == 3) (return R.drawable.hangman_state_3)
@@ -51,10 +60,15 @@ class MainActivity : AppCompatActivity(), OnDataPass {
                     "YAY!! RHETT SAVES THE DAY!!",
                     Toast.LENGTH_LONG
                 ).show()
+            } else {
+                Toast.makeText(this,
+                    "\"" + data + "\" is in the word!",
+                    Toast.LENGTH_LONG
+                ).show()
             }
         } else {
             hang_state++
-            imgView.setImageResource(hangman_state_return(hang_state))
+            imgView.setImageResource(hangman_state_return(hang_state, data))
         }
     }
     override fun onCreate(savedInstanceState: Bundle?) {
