@@ -11,11 +11,13 @@ class CrimeHolder(
     fun bind(alphabet: String, alphabetListFragment: AlphabetListFragment, onData : OnDataPass) {
         binding.alphabetButton.text = alphabet
         binding.root.setOnClickListener{
-            binding.alphabetButton.text = "#"
-            binding.root.isFocusable = false
+            if (binding.alphabetButton.text != "#") {
+                binding.alphabetButton.text = "#"
+                binding.root.isFocusable = false
 
-            alphabetListFragment.rem(alphabet)
-            onData.onDataPass(alphabet)
+                alphabetListFragment.rem(alphabet)
+                onData.onDataPass(alphabet)
+            }
         }
     }
 }

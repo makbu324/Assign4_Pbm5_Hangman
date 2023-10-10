@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    tools:context=".MainActivity"
+    android:id="@+id/ll"
+    android:weightSum="2">
+
+    <ImageView
+        android:layout_weight="1"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_gravity="center"
+        android:id="@+id/hangman_state"
+        android:src="@drawable/hangman_state_0"/>
+
+    <LinearLayout
+        android:layout_weight="1"
+        android:layout_width="400dp"
+        android:layout_height="400dp"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/whats_the_word"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="75dp"
+            android:letterSpacing="0.15"
+            android:gravity="center"
+            android:textAlignment="center"
+            android:fontFamily="sans-serif-black" />
+        <androidx.fragment.app.FragmentContainerView
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/fragment_container"
+            android:name="com.example.assign4_pbm5_hangman.AlphabetListFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:context=".MainActivity" />
+    </LinearLayout>
+</LinearLayout>
