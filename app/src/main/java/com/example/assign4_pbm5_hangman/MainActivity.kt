@@ -1,5 +1,4 @@
 package com.example.assign4_pbm5_hangman
-
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
@@ -117,6 +116,7 @@ class MainActivity : AppCompatActivity(), OnDataPass {
                         foundVowels = true
                     }
                 }
+                disableVowels()
                 if (foundVowels) {
                     hang_state++
                     imgView.setImageResource(hangman_state_return(hang_state, "HintIncPic"))
@@ -139,5 +139,9 @@ class MainActivity : AppCompatActivity(), OnDataPass {
             "QUIRKY" -> "Hint: A little weird"
             else -> "No hint available"
         }
+    }
+
+    private fun disableVowels(){
+
     }
 }
