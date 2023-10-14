@@ -1,18 +1,20 @@
 package com.example.assign4_pbm5_hangman
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.fragment.app.viewModels
-import com.google.android.material.snackbar.Snackbar
 
 
 interface OnDataPass {
     fun onDataPass(data: String)
+    fun shouldRemHalfOrNot(): Boolean
+    fun remhalfSuccess()
+
+    fun getAnswer(): String
 }
 
 class MainActivity : AppCompatActivity(), OnDataPass {
@@ -25,8 +27,9 @@ class MainActivity : AppCompatActivity(), OnDataPass {
     private var hang_state: Int = 0
     private val Words = listOf("RONALD", "ACORNS", "BOXING", "BRONZE", "HIDDEN", "QUIRKY")
 
-    val alphabetlistfragment = AlphabetListFragment()
     private val crimeListViewModel: AlphabetListViewModel by viewModels()
+
+    private var timeToRemoveHalf = false //Mak here
 
     fun hangman_state_return(num: Int, alphabet: String): Int {
         if (alphabet != "HintIncPic")
@@ -77,6 +80,20 @@ class MainActivity : AppCompatActivity(), OnDataPass {
             imgView.setImageResource(hangman_state_return(hang_state, data))
         }
     }
+
+    override fun shouldRemHalfOrNot(): Boolean {
+        Log.d("HELLO", "KEEEP GOING")
+        return timeToRemoveHalf
+    }
+
+    override fun remhalfSuccess() {
+        timeToRemoveHalf = false
+    }
+
+    override fun getAnswer(): String {
+        return the_word
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -109,6 +126,9 @@ class MainActivity : AppCompatActivity(), OnDataPass {
                 //Will disable half of the remaining letters & costs a turn
                 hang_state++
                 imgView.setImageResource(hangman_state_return(hang_state, "HintIncPic"))
+
+                //Mak here.
+                timeToRemoveHalf = true
             }
             if (hintCount == 3) {
                 //Will show all vowels & costs a turn will also disable all vowels

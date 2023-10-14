@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.assign4_pbm5_hangman.databinding.FragmentAlphabetListBinding
@@ -26,6 +27,10 @@ class AlphabetListFragment : Fragment() {
     private val crimeListViewModel: AlphabetListViewModel by viewModels()
 
     lateinit var dataPasser: OnDataPass
+
+    lateinit var fragTrans: FragmentTransaction
+
+    private var remCount = 0
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -51,6 +56,7 @@ class AlphabetListFragment : Fragment() {
         binding.alphabetRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
         val crimes = crimeListViewModel.a_list
+
         val adapter = AlphabetListAdapter(crimes, this, dataPasser)
         binding.alphabetRecyclerView.adapter = adapter
 
@@ -63,9 +69,13 @@ class AlphabetListFragment : Fragment() {
     }
 
     fun rem(s: String) {
-        crimeListViewModel.a_list.remove(s)
+        remCount++
+        crimeListViewModel.a_list.set(crimeListViewModel.a_list.indexOf(s), "#")
     }
 
+    fun giveCrimes(): Int {
+        return remCount
+    }
 
 
 }
