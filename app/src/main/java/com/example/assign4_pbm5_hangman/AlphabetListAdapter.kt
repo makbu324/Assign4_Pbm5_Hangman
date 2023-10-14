@@ -40,14 +40,15 @@ class AlphabetListAdapter(
     override fun onBindViewHolder(holder: CrimeHolder, position: Int) {
         val alphabet = alphabets[(position) % 26]
         holder.bind(alphabet, alphabetListFragment, onData)
-        if (onData.shouldRemHalfOrNot() && alphabetListFragment.giveCrimes() < 13) {
+        if (onData.shouldRemHalfOrNot() && alphabetListFragment.giveCrimes() < 14) {
             for (g in alphabets) {
                 if (!(g[0] in onData.getAnswer()) && mutableListOf<Boolean>(true, false).random()) {
                     alphabetListFragment.rem(g)
                 }
-                if (alphabetListFragment.giveCrimes() > 12) break
+                if (alphabetListFragment.giveCrimes() > 13) break
             }
-            onData.remhalfSuccess()
+            if ((alphabetListFragment.giveCrimes() > 13))
+                onData.remhalfSuccess()
         }
     }
 
