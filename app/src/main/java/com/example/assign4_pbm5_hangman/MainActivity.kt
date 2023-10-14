@@ -4,8 +4,10 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.fragment.app.viewModels
 import com.google.android.material.snackbar.Snackbar
 
 
@@ -23,6 +25,8 @@ class MainActivity : AppCompatActivity(), OnDataPass {
     private var hang_state: Int = 0
     private val Words = listOf("RONALD", "ACORNS", "BOXING", "BRONZE", "HIDDEN", "QUIRKY")
 
+    val alphabetlistfragment = AlphabetListFragment()
+    private val crimeListViewModel: AlphabetListViewModel by viewModels()
 
     fun hangman_state_return(num: Int, alphabet: String): Int {
         if (alphabet != "HintIncPic")
@@ -116,7 +120,8 @@ class MainActivity : AppCompatActivity(), OnDataPass {
                         foundVowels = true
                     }
                 }
-                disableVowels()
+                for (char in "AEIOU")
+                    crimeListViewModel.a_list.remove(char.toString())
                 if (foundVowels) {
                     hang_state++
                     imgView.setImageResource(hangman_state_return(hang_state, "HintIncPic"))
@@ -139,9 +144,5 @@ class MainActivity : AppCompatActivity(), OnDataPass {
             "QUIRKY" -> "Hint: A little weird"
             else -> "No hint available"
         }
-    }
-
-    private fun disableVowels(){
-
     }
 }
