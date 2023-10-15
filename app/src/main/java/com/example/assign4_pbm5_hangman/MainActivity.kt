@@ -12,7 +12,11 @@ import androidx.appcompat.app.AppCompatActivity
 interface OnDataPass {
     fun onDataPass(data: String)
     fun shouldRemHalfOrNot(): Boolean
+
+    fun shouldRemVowels(): Boolean
     fun remhalfSuccess()
+
+    fun remvowelSuccess()
 
     fun getAnswer(): String
 }
@@ -26,10 +30,11 @@ class MainActivity : AppCompatActivity(), OnDataPass {
     private var the_word: String = ""
     private var hang_state: Int = 0
     private val Words = listOf("RONALD", "ACORNS", "BOXING", "BRONZE", "HIDDEN", "QUIRKY")
-
+    private lateinit var adapter: AlphabetListAdapter
     private val crimeListViewModel: AlphabetListViewModel by viewModels()
 
     private var timeToRemoveHalf = false //Mak here
+    private var timeToRemoveVowels = false
 
     fun hangman_state_return(num: Int, alphabet: String): Int {
         if (alphabet != "HintIncPic")
@@ -86,8 +91,16 @@ class MainActivity : AppCompatActivity(), OnDataPass {
         return timeToRemoveHalf
     }
 
+    override fun shouldRemVowels(): Boolean {
+        return timeToRemoveVowels
+    }
+
     override fun remhalfSuccess() {
         timeToRemoveHalf = false
+    }
+
+    override fun remvowelSuccess(){
+        timeToRemoveVowels = false
     }
 
     override fun getAnswer(): String {
@@ -132,16 +145,18 @@ class MainActivity : AppCompatActivity(), OnDataPass {
             }
             if (hintCount == 3) {
                 //Will show all vowels & costs a turn will also disable all vowels
+                val vowels = "AEIOU"
+                timeToRemoveVowels = true
                 var foundVowels = false
-                for (i in the_word.indices) {
-                    val char = the_word[i]
-                    if (char in "AEIOU") {
-                        onDataPass(char.toString())
+                for(vowel in vowels){
+                    if (vowel in the_word){
                         foundVowels = true
+
+                        if (vowel.toString() in crimeListViewModel.a_list) {
+                            onDataPass(vowel.toString())
+                        }
                     }
                 }
-                for (char in "AEIOU")
-                    crimeListViewModel.a_list.remove(char.toString())
                 if (foundVowels) {
                     hang_state++
                     imgView.setImageResource(hangman_state_return(hang_state, "HintIncPic"))

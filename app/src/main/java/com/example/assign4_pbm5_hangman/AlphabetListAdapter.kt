@@ -1,11 +1,9 @@
 package com.example.assign4_pbm5_hangman
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.assign4_pbm5_hangman.databinding.AlphabetListBinding
-import com.example.assign4_pbm5_hangman.databinding.FragmentAlphabetListBinding
 
 class CrimeHolder(
     private val binding: AlphabetListBinding
@@ -27,7 +25,7 @@ class CrimeHolder(
 class AlphabetListAdapter(
     private var alphabets: MutableList<String>,
     private val alphabetListFragment: AlphabetListFragment,
-    private val onData : OnDataPass,
+    private val onData: OnDataPass,
 ) : RecyclerView.Adapter<CrimeHolder>() {
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -39,6 +37,7 @@ class AlphabetListAdapter(
     }
     override fun onBindViewHolder(holder: CrimeHolder, position: Int) {
         val alphabet = alphabets[(position) % 26]
+        var index: Int = 0
         holder.bind(alphabet, alphabetListFragment, onData)
         if (onData.shouldRemHalfOrNot() && alphabetListFragment.giveCrimes() < 14) {
             for (g in alphabets) {
@@ -49,6 +48,12 @@ class AlphabetListAdapter(
             }
             if ((alphabetListFragment.giveCrimes() > 13))
                 onData.remhalfSuccess()
+        }
+
+        if (onData.shouldRemVowels()) {
+            val vowels = "AEIOU"
+            alphabets.removeAll{it in vowels}
+            onData.remvowelSuccess()
         }
     }
 
