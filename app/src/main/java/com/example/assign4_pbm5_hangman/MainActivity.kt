@@ -32,6 +32,7 @@ class MainActivity : AppCompatActivity(), OnDataPass {
     private val Words = listOf("RONALD", "ACORNS", "BOXING", "BRONZE", "HIDDEN", "QUIRKY")
     private lateinit var adapter: AlphabetListAdapter
     private val crimeListViewModel: AlphabetListViewModel by viewModels()
+    private val mainActivityViewModel: MainActivityViewModel by viewModels()
 
     private var timeToRemoveHalf = false //Mak here
     private var timeToRemoveVowels = false
@@ -54,22 +55,30 @@ class MainActivity : AppCompatActivity(), OnDataPass {
                 "OH NO!! YOU LOST!!",
                 Toast.LENGTH_LONG
             ).show()
+            mainActivityViewModel.lostTheGame = true
             (return R.drawable.hangman_state_lost)
         }
     }
 
     override fun onDataPass(data: String) {
-        if (data in the_word) {
-            var og = wordNow
-            wordNow = ""
-            for (i in the_word.indices) {
-                if (the_word[i].toString() == data || the_word[i] == og[i])
-                    wordNow += the_word[i].toString()
-                else wordNow += "_"
+        if (mainActivityViewModel.wonTheGame || mainActivityViewModel.lostTheGame) {
+            Toast.makeText(this,
+                "The game has ended!",
+                Toast.LENGTH_LONG
+            ).show()
+        }
+        else if (data in mainActivityViewModel.the_word) {
+            var og = mainActivityViewModel.wordNow
+            mainActivityViewModel.wordNow = ""
+            for (i in mainActivityViewModel.the_word.indices) {
+                if (mainActivityViewModel.the_word[i].toString() == data || mainActivityViewModel.the_word[i] == og[i])
+                    mainActivityViewModel.wordNow += mainActivityViewModel.the_word[i].toString()
+                else mainActivityViewModel.wordNow += "_"
             }
-            wordView.text = wordNow
-            if (wordNow == the_word) {
+            wordView.text = mainActivityViewModel.wordNow
+            if (mainActivityViewModel.wordNow == mainActivityViewModel.the_word) {
                 imgView.setImageResource(R.drawable.hangman_state_won)
+                mainActivityViewModel.wonTheGame = true
                 Toast.makeText(this,
                     "YAY!! RHETT SAVES THE DAY!!",
                     Toast.LENGTH_LONG
@@ -81,30 +90,30 @@ class MainActivity : AppCompatActivity(), OnDataPass {
                 ).show()
             }
         } else {
-            hang_state++
-            imgView.setImageResource(hangman_state_return(hang_state, data))
+            mainActivityViewModel.hang_state++
+            imgView.setImageResource(hangman_state_return(mainActivityViewModel.hang_state, data))
         }
     }
 
     override fun shouldRemHalfOrNot(): Boolean {
         Log.d("HELLO", "KEEEP GOING")
-        return timeToRemoveHalf
+        return mainActivityViewModel.timeToRemoveHalf
     }
 
     override fun shouldRemVowels(): Boolean {
-        return timeToRemoveVowels
+        return mainActivityViewModel.timeToRemoveVowels
     }
 
     override fun remhalfSuccess() {
-        timeToRemoveHalf = false
+        mainActivityViewModel.timeToRemoveHalf = false
     }
 
     override fun remvowelSuccess(){
-        timeToRemoveVowels = false
+        mainActivityViewModel.timeToRemoveVowels = false
     }
 
     override fun getAnswer(): String {
-        return the_word
+        return mainActivityViewModel.the_word
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -116,40 +125,48 @@ class MainActivity : AppCompatActivity(), OnDataPass {
         hintButton = findViewById(R.id.hint_button)
 
         chooseword()
-        wordNow = "______"
-        hang_state = 0
+        wordNow = mainActivityViewModel.wordNow
+        hang_state = mainActivityViewModel.hang_state
         wordView.text = wordNow
-        imgView.setImageResource(hangman_state_return(hang_state, "#"))
+        imgView.setImageResource(hangman_state_return(mainActivityViewModel.hang_state, "#"))
+
+        if (mainActivityViewModel.wonTheGame) {
+            imgView.setImageResource(R.drawable.hangman_state_won)
+        }
+        else if (mainActivityViewModel.lostTheGame) {
+            imgView.setImageResource(R.drawable.hangman_state_lost)
+        }
+
 
         hintButton.setOnClickListener{
-            hintCount++
+            mainActivityViewModel.hintCount++
             HintTime()
         }
     }
 
     private fun chooseword(){
-        the_word = Words.random()
+        mainActivityViewModel.the_word = mainActivityViewModel.Words.random()
     }
     private fun HintTime() {
-        if (hang_state != 6) {
-            if (hintCount == 1) {
-                Toast.makeText(this, Hint4Word(the_word), Toast.LENGTH_LONG).show()
+        if (mainActivityViewModel.hang_state != 6) {
+            if (mainActivityViewModel.hintCount == 1) {
+                Toast.makeText(this, Hint4Word(mainActivityViewModel.the_word), Toast.LENGTH_LONG).show()
             }
-            if (hintCount == 2) {
+            if (mainActivityViewModel.hintCount == 2) {
                 //Will disable half of the remaining letters & costs a turn
-                hang_state++
-                imgView.setImageResource(hangman_state_return(hang_state, "HintIncPic"))
+                mainActivityViewModel.hang_state++
+                imgView.setImageResource(hangman_state_return(mainActivityViewModel.hang_state, "HintIncPic"))
 
                 //Mak here.
-                timeToRemoveHalf = true
+                mainActivityViewModel.timeToRemoveHalf = true
             }
-            if (hintCount == 3) {
+            if (mainActivityViewModel.hintCount == 3) {
                 //Will show all vowels & costs a turn will also disable all vowels
                 val vowels = "AEIOU"
-                timeToRemoveVowels = true
+                mainActivityViewModel.timeToRemoveVowels = true
                 var foundVowels = false
                 for(vowel in vowels){
-                    if (vowel in the_word){
+                    if (vowel in mainActivityViewModel.the_word){
                         foundVowels = true
 
                         if (vowel.toString() in crimeListViewModel.a_list) {
@@ -158,8 +175,8 @@ class MainActivity : AppCompatActivity(), OnDataPass {
                     }
                 }
                 if (foundVowels) {
-                    hang_state++
-                    imgView.setImageResource(hangman_state_return(hang_state, "HintIncPic"))
+                    mainActivityViewModel.hang_state++
+                    imgView.setImageResource(hangman_state_return(mainActivityViewModel.hang_state, "HintIncPic"))
                 } else {
                     Toast.makeText(this, "No more vowels", Toast.LENGTH_SHORT).show()
                 }
