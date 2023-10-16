@@ -28,8 +28,6 @@ class AlphabetListFragment : Fragment() {
 
     lateinit var dataPasser: OnDataPass
 
-    lateinit var fragTrans: FragmentTransaction
-
     private var remCount = 0
 
     override fun onAttach(context: Context) {

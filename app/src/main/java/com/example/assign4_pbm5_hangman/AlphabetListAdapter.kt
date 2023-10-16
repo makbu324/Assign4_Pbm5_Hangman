@@ -41,7 +41,7 @@ class AlphabetListAdapter(
         holder.bind(alphabet, alphabetListFragment, onData)
         if (onData.shouldRemHalfOrNot() && alphabetListFragment.giveCrimes() < 14) {
             for (g in alphabets) {
-                if (!(g[0] in onData.getAnswer()) && mutableListOf<Boolean>(true, false).random()) {
+                if (!(g[0] in onData.getAnswer()) ) {
                     alphabetListFragment.rem(g)
                 }
                 if (alphabetListFragment.giveCrimes() > 13) break
