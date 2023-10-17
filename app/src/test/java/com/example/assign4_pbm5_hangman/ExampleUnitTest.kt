@@ -11,7 +11,20 @@ import org.junit.Assert.*
  */
 class ExampleUnitTest {
     @Test
-    fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
+    fun progressVariablesInitialized() {
+        var newViewModel = MainActivityViewModel()
+        assertEquals(newViewModel.timeToRemoveHalf, false)
+        assertEquals(newViewModel.timeToRemoveVowels, false)
+        assertEquals(newViewModel.wonTheGame, false)
+        assertEquals(newViewModel.lostTheGame, false)
+
+    }
+
+    @Test
+    fun allPossibleWordsAreCorrectLength() {
+        var newViewModel = MainActivityViewModel()
+        for (word in newViewModel.Words) {
+            assertEquals(word.length, 6)
+        }
     }
 }
