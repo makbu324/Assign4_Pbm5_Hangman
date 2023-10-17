@@ -67,7 +67,7 @@ class ExampleInstrumentedTest {
     }
 }
 
-class ExampleInstrumentedTest2 {
+class ExampleInstrumentedTest2 { //second instru test
     @Test
     fun useAppContext() {
         // Context of the app under test.
