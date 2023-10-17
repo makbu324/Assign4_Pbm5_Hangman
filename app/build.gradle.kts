@@ -50,4 +50,5 @@ dependencies {
     implementation("androidx.fragment:fragment-ktx:1.4.1")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1")
     implementation("androidx.recyclerview:recyclerview:1.2.1")
+    androidTestImplementation("androidx.test.uiautomator:uiautomator:2.2.0")
 }
